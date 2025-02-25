@@ -13,7 +13,7 @@ const Cohort = require("./models/Cohort.model");
 // Devs Team - Import the provided files with JSON data of students and cohorts here:
 // ...
 mongoose
-  .connect("mongodb://127.0.0.1:27017/cohort-tools-api")
+  .connect("mongodb+srv://equipoc:tR1mzcvEfh5rzFMz@cluster0.r1x5c.mongodb.net/cohort-tools-api?retryWrites=true&w=majority")
   .then((x) => {
     console.log(`Connected to Database: "${x.connections[0].name}"`);
   })
@@ -42,7 +42,7 @@ app.get("/docs", (req, res) => {
 app.get("/api/cohorts", (req, res) => {
   Cohort.find({})
     .then((cohorts) => {
-      console.log("Retrieved cohorts ->", cohorts);
+      console.log("Retrieved  ->", cohorts);
       res.json(cohorts);
     })
     .catch((error) => {
