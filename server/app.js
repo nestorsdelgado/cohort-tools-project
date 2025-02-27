@@ -43,7 +43,7 @@ app.get("/docs", (req, res) => {
 
 app.get("/api/students", (req, res) => {
   Student.find({})
-  .populate("cohort")
+    .populate("cohort")
     .then((students) => {
       console.log("Retrieved students ->", students);
       res.json(students);
@@ -83,7 +83,7 @@ app.get("/api/students/cohort/:cohortId", (req, res) => {
   const cohortId = req.params.cohortId
 
   Student.find({ cohort: cohortId })
-  .populate("cohort")
+    .populate("cohort")
     .then((students) => {
       console.log("Retrieved students ->", students);
       res.json(students);
@@ -98,7 +98,7 @@ app.get("/api/students/:studentId", (req, res) => {
   const studentId = req.params.studentId;
 
   Student.findById(studentId)
-  .populate("cohort")
+    .populate("cohort")
     .then((student) => {
       console.log("Retrieved student ->", student);
 
@@ -200,6 +200,13 @@ app.delete("/api/cohorts/:cohortId", async (req, res) => {
     res.status(500).send("Failed to delete the cohort.");
   }
 })
+
+// Error handler
+
+const { errorHandler, notFoundHandler } = require("./middleware/error-handling");
+
+app.use(errorHandler);
+app.use(notFoundHandler);
 
 // START SERVER
 app.listen(PORT, () => {
