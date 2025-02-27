@@ -8,17 +8,20 @@ const cors = require('cors')
 const mongoose = require("mongoose");
 const Student = require("./models/Student.model");
 const Cohort = require("./models/Cohort.model");
+const User = require("./models/User.model")
+
+const { isAuthenticated } = require("./middleware/jwt.middleware");
 
 // STATIC DATA
 // Devs Team - Import the provided files with JSON data of students and cohorts here:
 // ...
 mongoose
-  .connect("mongodb+srv://equipoc:tR1mzcvEfh5rzFMz@cluster0.r1x5c.mongodb.net/cohort-tools-api?retryWrites=true&w=majority")
+.connect("mongodb+srv://equipoc:tR1mzcvEfh5rzFMz@cluster0.r1x5c.mongodb.net/cohort-tools-api?retryWrites=true&w=majority")
   .then((x) => {
     console.log(`Connected to Database: "${x.connections[0].name}"`);
   })
   .catch((err) => console.error("Error connecting to MongoDB", err));
-
+  
 // INITIALIZE EXPRESS APP - https://expressjs.com/en/4x/api.html#express
 const app = express();
 
@@ -200,6 +203,26 @@ app.delete("/api/cohorts/:cohortId", async (req, res) => {
     res.status(500).send("Failed to delete the cohort.");
   }
 })
+
+//USER
+
+app.get("/api/users/:id", isAuthenticated, (req, res) => {
+  User.findById(id)
+    .then((user) => {
+      console.log("Retrieved user ->", user);
+
+      res.status(200).json(user);
+    })
+    .catch((error) => {
+      console.error("Error while retrieving user ->", error);
+      res.status(500).json({ error: "Failed to retrieve user" });
+    });
+})
+
+
+// Auth Router
+const authRouter = require("./routes/auth.routes");   
+app.use("/auth", authRouter);
 
 // Error handler
 
