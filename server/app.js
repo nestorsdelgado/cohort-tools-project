@@ -1,3 +1,5 @@
+require("dotenv/config");
+
 const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
@@ -207,6 +209,7 @@ app.delete("/api/cohorts/:cohortId", async (req, res) => {
 //USER
 
 app.get("/api/users/:id", isAuthenticated, (req, res) => {
+  const { id } = req.params;
   User.findById(id)
     .then((user) => {
       console.log("Retrieved user ->", user);
