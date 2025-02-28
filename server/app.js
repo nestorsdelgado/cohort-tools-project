@@ -143,8 +143,14 @@ app.put("/api/students/:studentId", (req, res) => {
 // COHORTS
 
 app.get("/api/cohorts", async (req, res) => {
+  const { campus, program } = req.query;
+
+  // Filtra los cohorts según los parámetros
+  let query = {};
+  if (campus) query.campus = campus;
+  if (program) query.program = program;
   try {
-    const cohorts = await Cohort.find({});
+    const cohorts = await Cohort.find(query);
     res.status(200).json(cohorts);
   } catch (error) {
     console.error(error);
